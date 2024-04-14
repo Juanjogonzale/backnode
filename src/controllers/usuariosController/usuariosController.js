@@ -1,29 +1,27 @@
-
 const db = require('../../../db');
-const { query } = require('express');
 
-//controlador para guardar un usuario en la tabla  de usuarios
+// Controlador para guardar un usuario en la tabla de usuarios
 async function guardarUsuario(req, res) {
-    const {nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado} = req.body;
+    const { nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado } = req.body;
 
     try {
-        const query = 'INSERT INTO (nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado) values (nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado)';
-        const values =  [nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado];
+        const query = 'INSERT INTO usuarios (nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+        const values = [nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado];
         const result = await db.query(query, values);
 
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        
+        console.error('Error al guardar el usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
 
-
-//controlador para obtener todos los usuarios
-async function obtenerUsuarios(req, res){
+// Controlador para obtener todos los usuarios
+async function obtenerUsuarios(req, res) {
     try {
-        const query =  'SELECT * FROM "usuarios"';
+        const query = 'SELECT * FROM usuarios';
         const result = await db.query(query);
-        
+
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('Error al obtener los usuarios:', error);
@@ -35,3 +33,4 @@ module.exports = {
     guardarUsuario,
     obtenerUsuarios
 };
+
