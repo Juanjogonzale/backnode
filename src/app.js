@@ -1,5 +1,3 @@
-// En app.js
-
 const express = require('express');
 const config = require('./config');
 const cors = require('cors');
@@ -21,8 +19,8 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas
-app.get('/listaUsuarios', usuariosController.guardarUsuario);
-//app.post('/usuarios', userController.guardarUsuario);
+app.get('/listaUsuarios', usuariosController.obtenerUsuarios);
+app.post('/registrarUsuario', usuariosController.guardarUsuario);
 //app.get('/usuarios', userController.obtenerUsuarios);
 
 module.exports = app;
