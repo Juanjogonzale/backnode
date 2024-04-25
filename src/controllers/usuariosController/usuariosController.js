@@ -32,8 +32,9 @@ async function obtenerUsuarios(req, res) {
     try {
         const query = 'SELECT * FROM usuarios';
         const result = await db.query(query);
+        console.log("datos::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::",result);
     
-        res.status(201).json(result.rows);
+        res.status(201).json(result);
       } catch (error) {
         console.error('Error al obtener los usuarios:', error);
         res.status(500).json({ error: 'Error interno del servidor' });

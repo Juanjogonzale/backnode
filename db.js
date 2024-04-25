@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   database: 'proyectopow',
   password: '',
-  port: 3306
+  port: 3307
 });
 
 // Conectarse a la base de datos
