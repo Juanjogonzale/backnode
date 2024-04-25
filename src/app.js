@@ -4,7 +4,7 @@ const cors = require('cors');
 //const detallesPedidosController = require('./controllers/detallespedidosController/detallespedidosController');
 //const facturasController = require('./controllers/facturasController/facturasController');
 //const pedidosController = require('./controllers/pedidosController/pedidosController');
-//const productosController = require('./controllers/productosController/productosController');
+const productosController = require('./controllers/productosController/productosController');
 const usuariosController = require('./controllers/usuariosController/usuariosController');
 //const transaccionesController = require('./controllers/transaccionesController/transaccionesController');
 //const userController = require('./controllers/userController/userController');
@@ -21,6 +21,7 @@ app.use(express.json());
 // Rutas
 app.get('/listaUsuarios', usuariosController.obtenerUsuarios);
 app.post('/registrarUsuario', usuariosController.guardarUsuario);
-//app.get('/usuarios', userController.obtenerUsuarios);
+app.get('/listaProductos', productosController.obtenerProductos);
+app.post('/registrarproductos', productosController.guardarProductos);
 
 module.exports = app;
