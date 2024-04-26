@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   database: 'proyectopow',
   password: '',
-  port: 3307
+  port: 3306
 });
 
 // Utilizar async/await o .then() para realizar consultas

@@ -9,7 +9,8 @@ async function guardarUsuario(req, res) {
         const values = [nombres, apellidos, cedula, email, password, direccion, ciudad, rol, estado];
         
         // Ejecutar la consulta SQL
-        const [result, fields] = await db.execute(query, values);
+        const result = await db.query(query, values);
+        //const [result, fields] = await db.execute(query, values);
 
         // Verificar si la inserción fue exitosa
         if (result.affectedRows > 0) {
