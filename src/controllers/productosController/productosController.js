@@ -25,7 +25,7 @@ async function guardarProductos(req, res) {
     }
 }
 
-// Controlador para obtener todos los usuarios
+// Controlador para obtener todos los productos
 async function obtenerProductos(req, res) {
     try {
         console.log('Conexión establecida. Ejecutando consulta...');
@@ -40,8 +40,30 @@ async function obtenerProductos(req, res) {
     }
 }
 
+//optener id producto
+async function obtenerIdProductos(req, res) {
+    const id = req.params.id;
+
+    try {
+        console.log('Conexión establecida. Ejecutando consulta para obtener detalles del artículo con ID:', id);
+        const [result, fields] = await db.promise().query('SELECT * FROM productos WHERE idproductos = ?', [id]);
+        
+        if (result.length === 0) {
+            console.log('No se encontró ningún artículo con el ID proporcionado:', id);
+            return res.status(404).json({ error: 'Artículo no encontrado' });
+        }
+    
+        console.log('Detalles del artículo entregados por la db:', result[0]);
+        res.status(200).json(result[0]);
+    } catch (error) {
+        console.error('Error al obtener los detalles del artículo:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
 module.exports = {
     guardarProductos,
-    obtenerProductos
+    obtenerProductos,
+    obtenerIdProductos
 };
 
