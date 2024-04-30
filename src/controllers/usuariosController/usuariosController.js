@@ -35,6 +35,8 @@ async function obtenerUsuarios(req, res) {
 }
 
 
+const jwt = require('jsonwebtoken');
+
 async function loginUsuario(req, res) {
     console.log(req.body);
     const { email, password } = req.body;
@@ -61,8 +63,17 @@ async function loginUsuario(req, res) {
             return res.status(401).json({ error: 'Contraseña incorrecta' });
         }
 
-        // Si el correo y la contraseña son correctos, enviar los datos del usuario
+        // Si el correo y la contraseña son correctos, generar el token JWT
+        const token = jwt.sign({ email: usuario.email, id: usuario.idusuarios }, 'secreto', { expiresIn: '1h' });
+
+        // Enviar el token en la respuesta
         res.status(200).json({
+            mensaje: 'Inicio de sesión exitoso',
+            token: token
+        });
+
+        // Si el correo y la contraseña son correctos, enviar los datos del usuario
+        /*res.status(200).json({
             mensaje: 'Inicio de sesión exitoso',
             usuario: {
                 id: usuario.idusuarios,
@@ -71,7 +82,7 @@ async function loginUsuario(req, res) {
                 apellidos: usuario.apellidos,
                 cedula: usuario.cedula
             }
-        });
+        });*/
         
     } catch (error) {
         console.log('Error al iniciar sesión:', error);
@@ -79,12 +90,18 @@ async function loginUsuario(req, res) {
     }
 }
 
+async function logoutUsuario(req, res) {
+    // Aquí no es necesario hacer nada ya que los tokens JWT son stateless
+    res.status(200).json({ mensaje: 'Logout exitoso' });
+}
+
 
 
 module.exports = {
     guardarUsuario,
     obtenerUsuarios,
-    loginUsuario
+    loginUsuario,
+    logoutUsuario
 };
 
 

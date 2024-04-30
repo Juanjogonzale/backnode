@@ -25,5 +25,6 @@ app.get('/listaProductos', productosController.obtenerProductos);
 app.get('/detalleArticulo/:id', productosController.obtenerIdProductos);
 app.post('/registrarproductos', productosController.guardarProductos);
 app.post('/login', usuariosController.loginUsuario);
+app.post('/logout', usuariosController.logoutUsuario);
 
 module.exports = app;
