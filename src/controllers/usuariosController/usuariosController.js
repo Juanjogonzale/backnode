@@ -64,7 +64,7 @@ async function loginUsuario(req, res) {
         }
 
         // Si el correo y la contraseña son correctos, generar el token JWT
-        const token = jwt.sign({ email: usuario.email, id: usuario.idusuarios }, 'secreto', { expiresIn: '1h' });
+        const token = jwt.sign({ email: usuario.email, password: usuario.password }, 'secreto', { expiresIn: '1h' });
 
         // Enviar el token en la respuesta
         res.status(200).json({
@@ -90,10 +90,38 @@ async function loginUsuario(req, res) {
     }
 }
 
+// Función para decodificar el token y obtener los datos del usuario
+function obtenerDatosUsuario(token) {
+    try {
+    // Decodificar el token para obtener los datos del usuario
+    const decoded = jwt.verify(token, 'secreto');
+        
+        // Supongamos que el token contiene los datos del usuario en forma de objeto
+        const { nombres, apellidos, email } = decoded;
+    
+        // Retornar los datos del usuario
+        return { nombres, apellidos, email };
+                } catch (error) {
+                // Manejar errores de decodificación del token
+                console.error('Error al decodificar el token:', error);
+                return null;
+        }
+}
+    
+    
+//const token = 'tu_token_jwt_aqui'; // Aquí deberías tener el token que recibiste del cliente
+const datosUsuario = obtenerDatosUsuario(token);
+    if (datosUsuario) {
+            console.log('Datos del usuario:', datosUsuario);
+         } else {
+                console.log('Token inválido o expirado.');
+        }
+
 async function logoutUsuario(req, res) {
     // Aquí no es necesario hacer nada ya que los tokens JWT son stateless
     res.status(200).json({ mensaje: 'Logout exitoso' });
 }
+
 
 
 
