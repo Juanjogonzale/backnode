@@ -23,7 +23,7 @@ app.get('/listaUsuarios', usuariosController.obtenerUsuarios);
 app.post('/registrarUsuario', usuariosController.guardarUsuario);
 app.get('/listaProductos', productosController.obtenerProductos);
 app.get('/detalleArticulo/:id', productosController.obtenerIdProductos);
-app.post('/registrarproductos', productosController.guardarProductos);
+app.post('/registrarProductos', productosController.guardarProductos);
 app.post('/login', usuariosController.loginUsuario);
 app.post('/logout', usuariosController.logoutUsuario);
 

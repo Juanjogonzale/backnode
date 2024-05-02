@@ -1,29 +1,51 @@
-const db = require('../../../db');
+const express = require('express');
+const router = express.Router(); // Crea un router de Express
 
-// Controlador para guardar un usuario en la tabla de usuarios
+const db = require('../../../db');
+const multer = require('multer');
+const path = require('path');
+
+// Configuración de multer para almacenar las imágenes
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, '../img')); // Ruta completa para la carpeta de imágenes
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname); // Nombre único para la imagen
+    }
+  });
+  
+  const upload = multer({ storage: storage });
+
+// Controlador para guardar un producto en la base de datos
 async function guardarProductos(req, res) {
-    const { nombre, descripcion, precio, stock, imagen } = req.body;
+    const { nombre, descripcion, precio, stock } = req.body;
 
     try {
+        // Verificar si se han proporcionado todos los datos necesarios
+        if (!nombre || !descripcion || !precio || !stock || !req.file) {
+            return res.status(400).json({ error: 'Por favor, proporcione todos los datos requeridos, incluida la imagen' });
+        }
+
+        const imagen = req.file.path; // Ruta de la imagen en el servidor
+
+        // Insertar el producto en la base de datos junto con la ruta de la imagen
         const query = 'INSERT INTO productos (nombre, descripcion, precio, stock, imagen) VALUES (?, ?, ?, ?, ?)';
         const values = [nombre, descripcion, precio, stock, imagen];
-        
-        // Ejecutar la consulta SQL
-        const [result, fields] = await db.execute(query, values);
+        await db.execute(query, values);
 
-        // Verificar si la inserción fue exitosa
-        if (result.affectedRows > 0) {
-            console.log('productos guardado exitosamente en el backend:', result.insertId);
-            res.status(201).json({ message: 'Usuario guardado exitosamente', userId: result.insertId });
-        } else {
-            console.error('Error al guardar el usuario:', result.message);
-            res.status(500).json({ error: 'Error interno del servidor' });
-        }
+        // Si no hay errores, enviar una respuesta exitosa
+        console.log('Producto guardado exitosamente en el backend');
+        res.status(201).json({ message: 'Producto guardado exitosamente' });
     } catch (error) {
-        console.error('Error al guardar el usuario:', error);
+        console.error('Error al guardar el producto:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
+
+// Ruta para guardar un producto, utilizando el middleware de multer para manejar la carga de archivos
+router.post('/registrarProductos', upload.single('imagen'), guardarProductos);
+
 
 // Controlador para obtener todos los productos
 async function obtenerProductos(req, res) {

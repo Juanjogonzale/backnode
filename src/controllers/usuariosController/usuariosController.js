@@ -63,8 +63,9 @@ async function loginUsuario(req, res) {
             return res.status(401).json({ error: 'Contraseña incorrecta' });
         }
 
-        // Si el correo y la contraseña son correctos, generar el token JWT
-        const token = jwt.sign({ email: usuario.email, password: usuario.password }, 'secreto', { expiresIn: '1h' });
+       // Si el correo y la contraseña son correctos, generar el token JWT
+       const token = jwt.sign({ email: usuario.email, id: usuario.idusuarios }, 'secreto', { expiresIn: '1h' });
+       console.log('token generado: ', token);
 
         // Enviar el token en la respuesta
         res.status(200).json({
@@ -97,25 +98,25 @@ function obtenerDatosUsuario(token) {
     const decoded = jwt.verify(token, 'secreto');
         
         // Supongamos que el token contiene los datos del usuario en forma de objeto
-        const { nombres, apellidos, email } = decoded;
+        const { email, id } = decoded;
     
         // Retornar los datos del usuario
-        return { nombres, apellidos, email };
-                } catch (error) {
-                // Manejar errores de decodificación del token
-                console.error('Error al decodificar el token:', error);
-                return null;
-        }
+        return { email, id };
+    } catch (error) {
+        // Manejar errores de decodificación del token
+        console.error('Error al decodificar el token:', error);
+        return null;
+    }
 }
     
     
-//const token = 'tu_token_jwt_aqui'; // Aquí deberías tener el token que recibiste del cliente
+const token = 'secreto'; // Aquí deberías tener el token que recibiste del cliente
 const datosUsuario = obtenerDatosUsuario(token);
-    if (datosUsuario) {
-            console.log('Datos del usuario:', datosUsuario);
-         } else {
-                console.log('Token inválido o expirado.');
-        }
+if (datosUsuario) {
+    console.log('Datos del usuario:', datosUsuario);
+} else {
+    console.log('Token inválido o expirado.');
+}
 
 async function logoutUsuario(req, res) {
     // Aquí no es necesario hacer nada ya que los tokens JWT son stateless
