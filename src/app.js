@@ -7,7 +7,6 @@ const cors = require('cors');
 const productosController = require('./controllers/productosController/productosController');
 const usuariosController = require('./controllers/usuariosController/usuariosController');
 //const transaccionesController = require('./controllers/transaccionesController/transaccionesController');
-//const userController = require('./controllers/userController/userController');
 
 const app = express();
 

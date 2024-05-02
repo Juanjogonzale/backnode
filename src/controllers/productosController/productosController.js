@@ -8,8 +8,8 @@ const path = require('path');
 // Configuración de multer para almacenar las imágenes
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, '../img')); // Ruta completa para la carpeta de imágenes
-    },
+        cb(null, path.join(__dirname, '../../img')); // Ruta completa para la carpeta de imágenes
+      },
     filename: function (req, file, cb) {
       cb(null, Date.now() + '-' + file.originalname); // Nombre único para la imagen
     }
@@ -17,9 +17,13 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage: storage });
 
+  // Ruta para guardar un producto, utilizando el middleware de multer para manejar la carga de archivos
+router.post('/registrarProductos', upload.single('imagen'), guardarProductos);
+
 // Controlador para guardar un producto en la base de datos
 async function guardarProductos(req, res) {
     const { nombre, descripcion, precio, stock } = req.body;
+
 
     try {
         // Verificar si se han proporcionado todos los datos necesarios
@@ -27,12 +31,16 @@ async function guardarProductos(req, res) {
             return res.status(400).json({ error: 'Por favor, proporcione todos los datos requeridos, incluida la imagen' });
         }
 
+        // Imprimir el valor de req.file para verificar la ruta de la imagen
+        console.log('Ruta de la imagen:', req.file.path);
+
         const imagen = req.file.path; // Ruta de la imagen en el servidor
+        
 
         // Insertar el producto en la base de datos junto con la ruta de la imagen
         const query = 'INSERT INTO productos (nombre, descripcion, precio, stock, imagen) VALUES (?, ?, ?, ?, ?)';
         const values = [nombre, descripcion, precio, stock, imagen];
-        await db.execute(query, values);
+        await db.promise().query(query, values);
 
         // Si no hay errores, enviar una respuesta exitosa
         console.log('Producto guardado exitosamente en el backend');
@@ -43,8 +51,7 @@ async function guardarProductos(req, res) {
     }
 }
 
-// Ruta para guardar un producto, utilizando el middleware de multer para manejar la carga de archivos
-router.post('/registrarProductos', upload.single('imagen'), guardarProductos);
+
 
 
 // Controlador para obtener todos los productos
