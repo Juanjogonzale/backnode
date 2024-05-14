@@ -1,11 +1,13 @@
 const express = require('express');
 const config = require('./config');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 //const detallesPedidosController = require('./controllers/detallespedidosController/detallespedidosController');
 //const facturasController = require('./controllers/facturasController/facturasController');
 //const pedidosController = require('./controllers/pedidosController/pedidosController');
 const productosController = require('./controllers/productosController/productosController');
 const usuariosController = require('./controllers/usuariosController/usuariosController');
+const facturaController = require('../controllers/facturaController');
 //const transaccionesController = require('./controllers/transaccionesController/transaccionesController');
 
 const app = express();

@@ -3,6 +3,9 @@ const multer = require('multer');
 const path = require('path');
 
 const Usuario = require('../components/usuario'); // Importar el modelo de usuario
+const Articulo = require('../models/articulo'); // Asegúrate de que esta ruta sea correcta
+const Factura = require('../models/factura');   // Asegúrate de que esta ruta sea correcta
+
 
 // Función para generar una nueva factura
 exports.generarFactura = async (req, res) => {
